@@ -71,10 +71,17 @@
             padding: 20px;
             border: 2px solid #e5e7eb;
             border-radius: 12px;
-            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;
+            /* THAY ĐỔI FONT STACK NÀY */
+            font-family: 'Noto Sans', 'DejaVu Sans', 'Segoe UI', 'Arial Unicode MS', 'Lucida Grande', monospace;
             font-size: 14px;
             resize: vertical;
             transition: all 0.3s ease;
+            /* Thêm các properties này để render font tốt hơn */
+            -webkit-font-feature-settings: "liga" 1;
+            font-feature-settings: "liga" 1;
+            text-rendering: optimizeLegibility;
+            /* Đảm bảo encoding UTF-8 */
+            unicode-bidi: embed;
         }
 
         .input-section textarea:focus {
@@ -413,6 +420,13 @@
                 border: 1px solid #e2e8f0;
                 display: inline-block;
                 font-weight: 500;
+            }
+        }
+        @media (max-width: 768px) {
+            .input-section textarea {
+                font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+                font-size: 16px; /* Tránh zoom trên iOS */
+                line-height: 1.4;
             }
         }
     </style>
