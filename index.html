@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 40px;
+        }
+
+        .input-section label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .input-section textarea {
+            width: 100%;
+            height: 200px;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .word-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .word-display {
+            font-size: 3em;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .phonetic {
+            font-size: 1.5em;
+            color: #64748b;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .word-type {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .meaning {
+            font-size: 1.3em;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .question {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question h3 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            border-color: #4f46e5;
+            background: #f8fafc;
+        }
+
+        .option.correct {
+            border-color: #10b981;
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .option.incorrect {
+            border-color: #ef4444;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+
+        .input-answer:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 20px 0;
+            color: #374151;
+        }
+
+        .back-btn {
+            background: #6b7280;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #4b5563;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .success-message {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .word-display {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Vocabulary Learning</h1>
+            <p>Học từ vựng tiếng Anh hiệu quả với phát âm và bài tập</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Input Section -->
+            <div id="input-section" class="section active">
+                <div class="input-section">
+                    <label for="vocabulary-input">📝 Nhập danh sách từ vựng (JSON format):</label>
+                    <textarea id="vocabulary-input" placeholder='[
+    {
+        "word": "candidate",
+        "phonetic": "/ˈkændɪdət/",
+        "word_type": "noun",
+        "meaning": "thí sinh; người dự thi"
+    },
+    {
+        "word": "require",
+        "phonetic": "/rɪˈkwaɪər/",
+        "word_type": "verb",
+        "meaning": "yêu cầu; bắt buộc"
+    }
+]'></textarea>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="loadVocabulary()">📥 Tải từ vựng</button>
+                        <button class="btn btn-secondary" onclick="showReview()" id="review-btn" disabled>👁️ Xem lại</button>
+                        <button class="btn btn-success" onclick="showLearningOptions()" id="learn-btn" disabled>🎓 Học từ vựng</button>
+                    </div>
+                    <div id="message-area"></div>
+                </div>
+            </div>
+
+            <!-- Review Section -->
+            <div id="review-section" class="section">
+                <button class="back-btn" onclick="showInputSection()">← Quay lại</button>
+                <div class="word-card" id="word-card">
+                    <div class="word-display" id="current-word"></div>
+                    <div class="phonetic" id="current-phonetic"></div>
+                    <div class="word-type" id="current-type"></div>
+                    <div class="meaning" id="current-meaning"></div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="review-progress"></div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="nav-btn btn-secondary" id="prev-btn" onclick="previousWord()">← Trước</button>
+                    <span id="word-counter">1 / 1</span>
+                    <button class="nav-btn btn-secondary" id="next-btn" onclick="nextWord()">Tiếp →</button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="pronounceWord()">🔊 Phát âm</button>
+                    <button class="btn btn-success" onclick="autoReview()" id="auto-btn">▶️ Tự động</button>
+                </div>
+            </div>
+
+            <!-- Learning Options -->
+            <div id="learning-options" class="section">
+                <button class="back-btn" onclick="showInputSection()">← Quay lại</button>
+                <h2 style="text-align: center; margin-bottom: 30px; color: #374151;">🎯 Chọn phương thức học</h2>
+                <div class="button-group" style="justify-content: center;">
+                    <button class="btn btn-primary" onclick="startMultipleChoice()">📝 Trắc nghiệm</button>
+                    <button class="btn btn-secondary" onclick="startTyping()">⌨️ Gõ từ</button>
+                </div>
+            </div>
+
+            <!-- Quiz Sections -->
+            <div id="multiple-choice-section" class="section">
+                <button class="back-btn" onclick="showLearningOptions()">← Quay lại</button>
+                <div class="quiz-container">
+                    <div class="score-display" id="mc-score">Điểm: 0/0</div>
+                    <div class="question" id="mc-question">
+                        <h3 id="mc-question-text"></h3>
+                        <div class="options" id="mc-options"></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="nextMultipleChoice()" id="mc-next-btn" style="display: none;">Câu tiếp theo</button>
+                </div>
+            </div>
+
+            <div id="typing-section" class="section">
+                <button class="back-btn" onclick="showLearningOptions()">← Quay lại</button>
+                <div class="quiz-container">
+                    <div class="score-display" id="typing-score">Điểm: 0/0</div>
+                    <div class="question" id="typing-question">
+                        <h3 id="typing-question-text"></h3>
+                        <input type="text" class="input-answer" id="typing-input" placeholder="Nhập từ tiếng Anh...">
+                        <button class="btn btn-primary" onclick="checkTypingAnswer()" id="typing-check-btn">Kiểm tra</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="nextTyping()" id="typing-next-btn" style="display: none;">Câu tiếp theo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let vocabularyList = [];
+        let currentWordIndex = 0;
+        let autoReviewInterval = null;
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let currentAnswer = '';
+
+        // Text-to-Speech function
+        function pronounceWord(word = null) {
+            const wordToPronounce = word || vocabularyList[currentWordIndex]?.word;
+            if (wordToPronounce && 'speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(wordToPronounce);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Load vocabulary from input
+        function loadVocabulary() {
+            const input = document.getElementById('vocabulary-input').value.trim();
+            const messageArea = document.getElementById('message-area');
+            
+            if (!input) {
+                showMessage('Vui lòng nhập danh sách từ vựng!', 'error');
+                return;
+            }
+
+            try {
+                const parsedData = JSON.parse(input);
+                
+                if (!Array.isArray(parsedData) || parsedData.length === 0) {
+                    throw new Error('Dữ liệu phải là một mảng chứa các từ vựng');
+                }
+
+                // Validate data structure
+                for (let item of parsedData) {
+                    if (!item.word || !item.phonetic || !item.word_type || !item.meaning) {
+                        throw new Error('Mỗi từ vựng phải có đầy đủ: word, phonetic, word_type, meaning');
+                    }
+                }
+
+                vocabularyList = parsedData;
+                currentWordIndex = 0;
+                
+                document.getElementById('review-btn').disabled = false;
+                document.getElementById('learn-btn').disabled = false;
+                
+                showMessage(`✅ Đã tải thành công ${vocabularyList.length} từ vựng!`, 'success');
+                
+            } catch (error) {
+                showMessage(`❌ Lỗi: ${error.message}`, 'error');
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageArea = document.getElementById('message-area');
+            messageArea.innerHTML = `<div class="${type}-message">${message}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        // Navigation functions
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function showInputSection() {
+            showSection('input-section');
+            stopAutoReview();
+        }
+
+        function showReview() {
+            if (vocabularyList.length === 0) return;
+            showSection('review-section');
+            displayCurrentWord();
+        }
+
+        function showLearningOptions() {
+            if (vocabularyList.length === 0) return;
+            showSection('learning-options');
+        }
+
+        // Review functions
+        function displayCurrentWord() {
+            if (vocabularyList.length === 0) return;
+            
+            const word = vocabularyList[currentWordIndex];
+            document.getElementById('current-word').textContent = word.word;
+            document.getElementById('current-phonetic').textContent = word.phonetic;
+            document.getElementById('current-type').textContent = word.word_type;
+            document.getElementById('current-meaning').textContent = word.meaning;
+            
+            updateProgress();
+            updateWordCounter();
+            updateNavigationButtons();
+            
+            // Auto pronounce
+            setTimeout(() => pronounceWord(), 500);
+        }
+
+        function updateProgress() {
+            const progress = ((currentWordIndex + 1) / vocabularyList.length) * 100;
+            document.getElementById('review-progress').style.width = progress + '%';
+        }
+
+        function updateWordCounter() {
+            document.getElementById('word-counter').textContent = 
+                `${currentWordIndex + 1} / ${vocabularyList.length}`;
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prev-btn').disabled = currentWordIndex === 0;
+            document.getElementById('next-btn').disabled = currentWordIndex === vocabularyList.length - 1;
+        }
+
+        function previousWord() {
+            if (currentWordIndex > 0) {
+                currentWordIndex--;
+                displayCurrentWord();
+            }
+        }
+
+        function nextWord() {
+            if (currentWordIndex < vocabularyList.length - 1) {
+                currentWordIndex++;
+                displayCurrentWord();
+            }
+        }
+
+        function autoReview() {
+            const autoBtn = document.getElementById('auto-btn');
+            
+            if (autoReviewInterval) {
+                stopAutoReview();
+            } else {
+                autoBtn.textContent = '⏸️ Dừng';
+                autoReviewInterval = setInterval(() => {
+                    if (currentWordIndex < vocabularyList.length - 1) {
+                        nextWord();
+                    } else {
+                        currentWordIndex = 0;
+                        displayCurrentWord();
+                    }
+                }, 3000);
+            }
+        }
+
+        function stopAutoReview() {
+            if (autoReviewInterval) {
+                clearInterval(autoReviewInterval);
+                autoReviewInterval = null;
+                document.getElementById('auto-btn').textContent = '▶️ Tự động';
+            }
+        }
+
+        // Quiz functions
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function generateQuizQuestions() {
+            quizQuestions = shuffleArray([...vocabularyList]);
+            currentQuizIndex = 0;
+            quizScore = 0;
+        }
+
+        // Multiple Choice Quiz
+        function startMultipleChoice() {
+            generateQuizQuestions();
+            showSection('multiple-choice-section');
+            displayMultipleChoiceQuestion();
+        }
+
+        function displayMultipleChoiceQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults('multiple-choice');
+                return;
+            }
+
+            const question = quizQuestions[currentQuizIndex];
+            const options = [question.word];
+            
+            // Add 3 random wrong answers
+            const otherWords = vocabularyList.filter(w => w.word !== question.word);
+            const shuffledOthers = shuffleArray(otherWords);
+            for (let i = 0; i < 3 && i < shuffledOthers.length; i++) {
+                options.push(shuffledOthers[i].word);
+            }
+            
+            const shuffledOptions = shuffleArray(options);
+            currentAnswer = question.word;
+            
+            document.getElementById('mc-question-text').textContent = 
+                `Từ tiếng Anh nào có nghĩa là: "${question.meaning}"?`;
+            
+            const optionsContainer = document.getElementById('mc-options');
+            optionsContainer.innerHTML = '';
+            
+            shuffledOptions.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectMultipleChoiceOption(optionDiv, option);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            updateMultipleChoiceScore();
+            document.getElementById('mc-next-btn').style.display = 'none';
+        }
+
+        function selectMultipleChoiceOption(element, selectedAnswer) {
+            // Disable all options
+            document.querySelectorAll('#mc-options .option').forEach(opt => {
+                opt.onclick = null;
+                if (opt.textContent === currentAnswer) {
+                    opt.classList.add('correct');
+                } else if (opt === element && selectedAnswer !== currentAnswer) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedAnswer === currentAnswer) {
+                quizScore++;
+                updateMultipleChoiceScore();
+            }
+            setTimeout(() => pronounceWord(currentAnswer), 500);
+            document.getElementById('mc-next-btn').style.display = 'block';
+        }
+
+        function updateMultipleChoiceScore() {
+            document.getElementById('mc-score').textContent = 
+                `Điểm: ${quizScore}/${currentQuizIndex + 1}`;
+        }
+
+        function nextMultipleChoice() {
+            currentQuizIndex++;
+            displayMultipleChoiceQuestion();
+        }
+
+        // Typing Quiz
+        function startTyping() {
+            generateQuizQuestions();
+            showSection('typing-section');
+            displayTypingQuestion();
+        }
+
+        function displayTypingQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults('typing');
+                return;
+            }
+
+            const question = quizQuestions[currentQuizIndex];
+            currentAnswer = question.word.toLowerCase();
+            
+            document.getElementById('typing-question-text').textContent = 
+                `Nhập từ tiếng Anh có nghĩa là: "${question.meaning}"`;
+            
+            const inputField = document.getElementById('typing-input');
+            inputField.value = '';
+            inputField.disabled = false;
+            inputField.focus();
+            
+            // Allow Enter key to submit
+            inputField.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    checkTypingAnswer();
+                }
+            };
+            
+            updateTypingScore();
+            document.getElementById('typing-check-btn').style.display = 'block';
+            document.getElementById('typing-next-btn').style.display = 'none';
+        }
+
+        function checkTypingAnswer() {
+            const userAnswer = document.getElementById('typing-input').value.trim().toLowerCase();
+            const inputField = document.getElementById('typing-input');
+            
+            if (userAnswer === currentAnswer) {
+                quizScore++;
+                inputField.style.borderColor = '#10b981';
+                inputField.style.backgroundColor = '#ecfdf5';
+            } else {
+                inputField.style.borderColor = '#ef4444';
+                inputField.style.backgroundColor = '#fef2f2';
+                inputField.value = `${userAnswer} ❌ Đáp án: ${currentAnswer}`;
+            }
+            
+            inputField.disabled = true;
+            updateTypingScore();
+            document.getElementById('typing-check-btn').style.display = 'none';
+            document.getElementById('typing-next-btn').style.display = 'block';
+        }
+
+        function updateTypingScore() {
+            document.getElementById('typing-score').textContent = 
+                `Điểm: ${quizScore}/${currentQuizIndex + 1}`;
+        }
+
+        function nextTyping() {
+            // Reset input field style
+            const inputField = document.getElementById('typing-input');
+            inputField.style.borderColor = '#e5e7eb';
+            inputField.style.backgroundColor = 'white';
+            
+            currentQuizIndex++;
+            displayTypingQuestion();
+        }
+
+        function showQuizResults(quizType) {
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let message = `🎉 Hoàn thành bài tập!\n\n`;
+            message += `Điểm số: ${quizScore}/${quizQuestions.length} (${percentage}%)\n\n`;
+            
+            if (percentage >= 90) {
+                message += `Xuất sắc! 🌟`;
+            } else if (percentage >= 70) {
+                message += `Tốt lắm! 👍`;
+            } else if (percentage >= 50) {
+                message += `Khá tốt! 📚`;
+            } else {
+                message += `Cần ôn tập thêm! 💪`;
+            }
+            
+            alert(message);
+            showLearningOptions();
+        }
+
+        // Initialize with sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            const sampleData = `[
+    {
+        "word": "candidate",
+        "phonetic": "/ˈkændɪdət/",
+        "word_type": "noun",
+        "meaning": "thí sinh; người dự thi"
+    },
+    {
+        "word": "require",
+        "phonetic": "/rɪˈkwaɪər/",
+        "word_type": "verb",
+        "meaning": "yêu cầu; bắt buộc"
+    },
+    {
+        "word": "problem",
+        "phonetic": "/ˈprɒbləm/",
+        "word_type": "noun",
+        "meaning": "vấn đề; tình huống cần giải quyết"
+    },
+    {
+        "word": "opinion",
+        "phonetic": "/əˈpɪnjən/",
+        "word_type": "noun",
+        "meaning": "ý kiến; quan điểm cá nhân"
+    },
+    {
+        "word": "part",
+        "phonetic": "/pɑːrt/",
+        "word_type": "noun",
+        "meaning": "phần; mục"
+    },
+    {
+        "word": "ask",
+        "phonetic": "/æsk/",
+        "word_type": "verb",
+        "meaning": "hỏi; yêu cầu"
+    },
+    {
+        "word": "make",
+        "phonetic": "/meɪk/",
+        "word_type": "verb",
+        "meaning": "làm; tạo ra; chuẩn bị"
+    }
+]`;
+            document.getElementById('vocabulary-input').value = sampleData;
+        });
+    </script>
+</body>
+</html>
