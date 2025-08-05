@@ -168,9 +168,14 @@
             font-size: 1.5em;
             color: #64748b;
             margin-bottom: 15px;
-            font-family: 'Doulos SIL', 'Times New Roman', serif;
+            /* Font stack ưu tiên cho mobile */
+            font-family: 'Noto Serif', 'DejaVu Sans', 'Apple Symbols', 'Symbola', 'Times New Roman', serif;
             font-weight: 400;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            /* Thêm properties cho mobile */
+            -webkit-font-feature-settings: "liga" 1;
+            font-feature-settings: "liga" 1;
+            text-rendering: optimizeLegibility;
         }
 
         .word-type {
@@ -396,6 +401,18 @@
             
             .word-display {
                 font-size: 2em;
+            }
+        }
+        @media (max-width: 768px) {
+            .phonetic {
+                font-size: 1.3em;
+                font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+                background: #f8fafc;
+                padding: 8px 12px;
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
+                display: inline-block;
+                font-weight: 500;
             }
         }
     </style>
