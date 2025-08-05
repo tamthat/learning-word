@@ -886,13 +886,17 @@
         }
 
         function copyFromImageTemplate() {
-            const prompt = 'Nếu bạn có một hình ảnh chứa các từ tiếng Anh chưa biết được tô màu vàng, hãy copy ảnh vào ChatGPT và nhập vào mẫu sau đây: tạo một list các dictionary trong python dựa trên các từ tô vàng với các key là : (1) từ - word; (2) phiên âm - phonetic; (3) từ loại - word_type; và (4) nghĩa tiếng Việt - meaning, cung cấp các nghĩa tiếng việt phổ biến (trong bối cảnh bài viết) cách nhau bằng dấu ;. Lưu ý, từ cung cấp trong kết quả là từ gốc, không phải từ đã chia hoặc ở thể khác. Không cần trả lời, chỉ cần trả kết quả, không cần đặt biến cho list. Key của dict là bằng tiếng Anh';
+            const fprompt = 'Nếu bạn có một hình ảnh chứa các từ tiếng Anh chưa biết được tô màu vàng, hãy copy ảnh vào ChatGPT và nhập vào mẫu sau đây: ';
+            const prompt = 'tạo một list các dictionary trong python dựa trên các từ tô vàng với các key là : (1) từ - word; (2) phiên âm - phonetic; (3) từ loại - word_type; và (4) nghĩa tiếng Việt - meaning, cung cấp các nghĩa tiếng việt phổ biến (trong bối cảnh bài viết) cách nhau bằng dấu ;. Lưu ý, từ cung cấp trong kết quả là từ gốc, không phải từ đã chia hoặc ở thể khác. Không cần trả lời, chỉ cần trả kết quả, không cần đặt biến cho list. Key của dict là bằng tiếng Anh';
             copyToClipboard(prompt);
+            document.getElementById('vocabulary-input').placeholder = fprompt + prompt;
         }
 
         function copyFromListTemplate() {
-            const prompt = 'Nếu bạn có một danh sách các từ tiếng Anh cần tra, hãy nhập ChatGPT mẫu sau đây: tạo một list các dictionary trong python dựa trên các từ ở cuối câu hỏi với các key là : (1) từ - word; (2) phiên âm - phonetic; (3) từ loại - word_type; và (4) nghĩa tiếng Việt - meaning, cung cấp các nghĩa tiếng việt phổ biến cách nhau bằng dấu ;. Lưu ý, từ cung cấp trong kết quả là từ gốc, không phải từ đã chia hoặc ở thể khác. Không cần trả lời, chỉ cần trả kết quả, không cần đặt biến cho list. Key của dict là bằng tiếng Anh. Các từ cần tra gồm:';
+            const fprompt = 'Nếu bạn có một danh sách các từ tiếng Anh cần tra, hãy nhập ChatGPT mẫu sau đây: '
+            const prompt = 'tạo một list các dictionary trong python dựa trên các từ ở cuối câu hỏi với các key là : (1) từ - word; (2) phiên âm - phonetic; (3) từ loại - word_type; và (4) nghĩa tiếng Việt - meaning, cung cấp các nghĩa tiếng việt phổ biến cách nhau bằng dấu ;. Lưu ý, từ cung cấp trong kết quả là từ gốc, không phải từ đã chia hoặc ở thể khác. Không cần trả lời, chỉ cần trả kết quả, không cần đặt biến cho list. Key của dict là bằng tiếng Anh. Các từ cần tra gồm:';
             copyToClipboard(prompt);
+            document.getElementById('vocabulary-input').placeholder = fprompt + prompt;
         }
     </script>
 </body>
