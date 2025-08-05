@@ -886,7 +886,7 @@
         }
 
         function copyFromImageTemplate() {
-            const fprompt = 'Nếu bạn có một hình ảnh chứa các từ tiếng Anh chưa biết được tô màu vàng, hãy copy ảnh vào ChatGPT và paste vào ChatGPT (đã copy, chỉ việc paste) nội dung rồi hỏi. Copy và paste kết quả phản hồi từ ChatGPT vào đây rồi nhấn "Tải từ vựng" để bắt đầu';
+            const fprompt = 'Nếu bạn có một hình ảnh chứa các từ tiếng Anh chưa biết được tô màu vàng, hãy paste mẫu vào ChatGPT (đã copy, chỉ việc paste), sau đó copy ảnh đã tô màu vàng các chữ chưa biết vào ChatGPT, nhấn enter. Copy và paste kết quả phản hồi từ ChatGPT vào đây rồi nhấn "Tải từ vựng" để bắt đầu';
             const prompt = 'tạo một list các dictionary trong python dựa trên các từ tô vàng với các key là : (1) từ - word; (2) phiên âm - phonetic; (3) từ loại - word_type; và (4) nghĩa tiếng Việt - meaning, cung cấp các nghĩa tiếng việt phổ biến (trong bối cảnh bài viết) cách nhau bằng dấu ;. Lưu ý, từ cung cấp trong kết quả là từ gốc, không phải từ đã chia hoặc ở thể khác. Không cần trả lời, chỉ cần trả kết quả, không cần đặt biến cho list. Key của dict là bằng tiếng Anh';
             copyToClipboard(prompt);
             document.getElementById('vocabulary-input').placeholder = fprompt;
